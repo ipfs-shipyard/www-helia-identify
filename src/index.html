@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Run Identify on a remote node with Helia</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@helia/css@1.0.1/helia.css"
+      crossorigin
+    />
+    <link rel="shortcut icon" href="https://unpkg.com/@helia/css@1.0.1/logos/favicon.ico" />
+    <link rel="stylesheet" href="./style.css" />
+
+    <script type="module" defer src="./index.js"></script>
+  </head>
+  <body class="montserrat f5">
+    <header class="flex items-center pa3 bg-navy">
+      <a href="https://github.com/ipfs/helia" title="home">
+        <img
+          alt="Helia logo"
+          src="https://unpkg.com/@helia/css@1.0.1/logos/outlined/helia-wordmark.svg"
+          style="height: 60px"
+          class="v-top"
+        />
+      </a>
+    </header>
+
+    <main class="pa4-l bg-snow mw9 mv5 center pa4">
+      <h1 class="pa0 f2 ma0 mb4 navy tc">Run Identify with Helia</h1>
+
+      <form id="input">
+        <label for="peer-id" class="f5 ma0 pb2 navy fw4 db">PeerId or Multiaddr</label>
+        <input
+          class="input-reset bn black-80 bg-white pa3 w-100 mb3"
+          id="peer-id"
+          name="peer-id"
+          type="text"
+          placeholder="QmFoo.."
+          required
+        />
+
+        <button
+          class="
+            button-reset
+            pv3
+            tc
+            bn
+            bg-animate bg-black-80
+            hover-bg-aqua
+            white
+            pointer
+            w-100
+          "
+          id="identify-button"
+          type="submit"
+          disabled="disabled"
+        >
+          Identify
+        </button>
+      </form>
+
+      <h3>Output</h3>
+
+      <div class="window">
+        <div id="terminal" class="terminal">
+          <div id="output"></div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

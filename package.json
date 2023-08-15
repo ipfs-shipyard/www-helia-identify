@@ -1,31 +1,23 @@
 {
-  "name": "helia-nextjs",
+  "name": "www-helia-identify",
   "version": "1.0.0",
-  "description": "Using Helia with nextjs",
   "private": true,
   "type": "module",
+  "description": "Run identify with a peer with Helia in a browser",
+  "license": "ISC",
   "scripts": {
-    "clean": "rimraf ./dist ./.next",
-    "dev": "next dev",
-    "build": "next build && next export -o dist",
-    "serve": "npm run dev",
-    "start": "next start",
-    "lint": "next lint",
+    "clean": "rimraf ./dist",
+    "build": "mkdir -p dist && cp src/index.html src/style.css dist && node esbuild.js",
+    "start": "npm run build && esbuild --servedir=dist",
     "test": "npm run build && test-browser-example test"
   },
+  "browserslist": "last 1 Chrome version",
   "dependencies": {
-    "helia": "^1.3.8",
-    "next": "^13.2.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@helia/unixfs": "^1.4.1",
+    "helia": "next"
   },
   "devDependencies": {
-    "@playwright/test": "^1.32.1",
-    "eslint": "^8.36.0",
-    "eslint-config-next": "^13.2.4",
-    "interface-datastore": "^8.2.0",
-    "playwright": "^1.32.1",
-    "rimraf": "^5.0.0",
-    "test-ipfs-example": "^1.0.0"
+    "esbuild": "^0.17.16",
+    "rimraf": "^5.0.0"
   }
 }
