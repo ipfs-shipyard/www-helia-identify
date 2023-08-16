@@ -3,8 +3,8 @@ import { build } from 'esbuild'
 build({
   entryPoints: ['./src/index.js'],
   outfile: './dist/index.js',
-  sourcemap: 'linked',
-  minify: true,
+  sourcemap: 'inline',
+  minify: false,
   bundle: true,
   define: {
     'process.env.NODE_DEBUG': 'false',

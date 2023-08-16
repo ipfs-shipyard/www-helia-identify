@@ -22,26 +22,33 @@
     <script type="module" defer src="./index.js"></script>
   </head>
   <body class="montserrat f5">
-    <header class="flex items-center pa3 bg-navy">
-      <a href="https://github.com/ipfs/helia" title="home">
-        <img
-          alt="Helia logo"
-          src="https://unpkg.com/@helia/css@1.0.1/logos/outlined/helia-wordmark.svg"
-          style="height: 60px"
-          class="v-top"
-        />
-      </a>
+    <header class="flex justify-between pa3 bg-navy">
+      <div class="flex items-center">
+        <a href="https://github.com/ipfs/helia" title="home">
+          <img
+            alt="Helia logo"
+            src="https://unpkg.com/@helia/css@1.0.1/logos/outlined/helia-wordmark.svg"
+            style="height: 60px"
+            class="v-top"
+          />
+        </a>
+      </div>
+      <div class="snow">
+        <p>
+          Peers: <span id="node-peer-count">0</span>
+        </p>
+      </div>
     </header>
 
     <main class="pa4-l bg-snow mw9 mv5 center pa4">
       <h1 class="pa0 f2 ma0 mb4 navy tc">Run Identify with Helia</h1>
 
-      <form id="input">
-        <label for="peer-id" class="f5 ma0 pb2 navy fw4 db">PeerId or Multiaddr</label>
+      <form>
+        <label for="input" class="f5 ma0 pb2 navy fw4 db">PeerId or Multiaddr</label>
         <input
           class="input-reset bn black-80 bg-white pa3 w-100 mb3"
-          id="peer-id"
-          name="peer-id"
+          id="input"
+          name="input"
           type="text"
           placeholder="QmFoo.."
           required

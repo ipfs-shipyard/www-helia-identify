@@ -3,13 +3,16 @@ import { peerIdFromString } from '@libp2p/peer-id'
 import { identifyService } from 'libp2p/identify'
 import { createHelia } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
+import { kadDHT } from '@libp2p/kad-dht'
+import { dcutrService } from 'libp2p/dcutr'
 
 const App = async () => {
   const DOM = {
-    peerId: () => document.getElementById('peer-id'),
+    input: () => document.getElementById('input'),
     identifyBtn: () => document.getElementById('identify-button'),
     output: () => document.getElementById('output'),
-    terminal: () => document.getElementById('terminal')
+    terminal: () => document.getElementById('terminal'),
+    peerCount: () => document.getElementById('node-peer-count')
   }
 
   const COLORS = {
@@ -118,7 +121,7 @@ const App = async () => {
   DOM.identifyBtn().onclick = async (e) => {
     e.preventDefault()
 
-    const value = DOM.peerId().value ?? ''
+    const value = DOM.input().value ?? ''
     let peerId = `${value}`.trim()
 
     if (!peerId) {
@@ -136,18 +139,32 @@ const App = async () => {
 
   showStatus('Creating Helia node')
     const helia = await createHelia({
-      services: {
-        identify: identifyService({
-          runOnConnectionOpen: false
-        })
+      libp2p: {
+        addresses: {
+          listen: []
+        },
+        services: {
+          identify: identifyService({
+            runOnConnectionOpen: false
+          }),
+          dht: kadDHT({
+            clientMode: true
+          }),
+          dcutr: dcutrService()
+        }
       }
     })
+
+  DOM.peerCount().innerText = 0
+  setInterval(() => {
+    DOM.peerCount().innerText = helia.libp2p.getPeers().length
+  }, 1000)
 
   clearStatus()
   showStatus(`Waiting for peers...`)
 
   while (true) {
-    if (helia.libp2p.getMultiaddrs().length > 0) {
+    if (helia.libp2p.getPeers().length > 0) {
       break
     }
 
@@ -160,7 +177,8 @@ const App = async () => {
 
   clearStatus()
   showStatus('Helia node ready', COLORS.active)
-  showStatus(`PeerID ${helia.libp2p.peerId}`, COLORS.active)
+  showStatus('Try running identify with a Peer ID or a Multiaddr', COLORS.active)
+  showStatus('E.g. /dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN', COLORS.active)
 
   DOM.identifyBtn().disabled = false
 }
