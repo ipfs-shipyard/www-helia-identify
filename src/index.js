@@ -1,10 +1,8 @@
 import { multiaddr } from '@multiformats/multiaddr'
 import { peerIdFromString } from '@libp2p/peer-id'
-import { identifyService } from 'libp2p/identify'
 import { createHelia } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
-import { kadDHT } from '@libp2p/kad-dht'
-import { dcutrService } from 'libp2p/dcutr'
+import { randomBytes } from '@libp2p/crypto'
 
 const App = async () => {
   const DOM = {
@@ -12,7 +10,8 @@ const App = async () => {
     identifyBtn: () => document.getElementById('identify-button'),
     output: () => document.getElementById('output'),
     terminal: () => document.getElementById('terminal'),
-    peerCount: () => document.getElementById('node-peer-count')
+    peerCount: () => document.getElementById('node-peer-count'),
+    //queryBtn: () => document.getElementById('query-button'),
   }
 
   const COLORS = {
@@ -90,7 +89,7 @@ const App = async () => {
     const connection = await helia.libp2p.dial(multiaddrs)
 
     clearStatus()
-    showStatus('Running identify')
+    showStatus('Connected, running identify')
 
     const response = await helia.libp2p.services.identify.identify(connection, {
       signal
@@ -138,22 +137,17 @@ const App = async () => {
   }
 
   showStatus('Creating Helia node')
-    const helia = await createHelia({
-      libp2p: {
-        addresses: {
-          listen: []
-        },
-        services: {
-          identify: identifyService({
-            runOnConnectionOpen: false
-          }),
-          dht: kadDHT({
-            clientMode: true
-          }),
-          dcutr: dcutrService()
-        }
+
+  const helia = await createHelia({
+    libp2p: {
+      addresses: {
+        listen: []
+      },
+      connectionManager: {
+        maxParallelDials: 100
       }
-    })
+    }
+  })
 
   DOM.peerCount().innerText = 0
   setInterval(() => {
@@ -181,6 +175,23 @@ const App = async () => {
   showStatus('E.g. /dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN', COLORS.active)
 
   DOM.identifyBtn().disabled = false
+/*
+  DOM.queryBtn().disabled = false
+  DOM.queryBtn().onclick = async (e) => {
+    e.preventDefault()
+
+    console.info('running query')
+    Promise.resolve().then(async () => {
+      try {
+        for await (const event of helia.libp2p.services.dht.getClosestPeers(randomBytes(32))) {
+          console.info('dht event', event)
+        }
+      } catch (err) {
+        console.error('error running queryq', err)
+      }
+    })
+  }
+*/
 }
 
 App().catch(err => {
