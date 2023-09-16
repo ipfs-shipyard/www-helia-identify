@@ -2,7 +2,6 @@ import { multiaddr } from '@multiformats/multiaddr'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { createHelia } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
-import { randomBytes } from '@libp2p/crypto'
 
 const App = async () => {
   const DOM = {
@@ -10,8 +9,7 @@ const App = async () => {
     identifyBtn: () => document.getElementById('identify-button'),
     output: () => document.getElementById('output'),
     terminal: () => document.getElementById('terminal'),
-    peerCount: () => document.getElementById('node-peer-count'),
-    //queryBtn: () => document.getElementById('query-button'),
+    peerCount: () => document.getElementById('node-peer-count')
   }
 
   const COLORS = {
@@ -142,9 +140,6 @@ const App = async () => {
     libp2p: {
       addresses: {
         listen: []
-      },
-      connectionManager: {
-        maxParallelDials: 100
       }
     }
   })
@@ -175,23 +170,6 @@ const App = async () => {
   showStatus('E.g. /dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN', COLORS.active)
 
   DOM.identifyBtn().disabled = false
-/*
-  DOM.queryBtn().disabled = false
-  DOM.queryBtn().onclick = async (e) => {
-    e.preventDefault()
-
-    console.info('running query')
-    Promise.resolve().then(async () => {
-      try {
-        for await (const event of helia.libp2p.services.dht.getClosestPeers(randomBytes(32))) {
-          console.info('dht event', event)
-        }
-      } catch (err) {
-        console.error('error running queryq', err)
-      }
-    })
-  }
-*/
 }
 
 App().catch(err => {
