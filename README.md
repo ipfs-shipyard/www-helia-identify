@@ -18,3 +18,7 @@ Ever wonder what a remote peer is sending in an [identify](https://github.com/li
 % npm i
 % npm start
 ```
+
+## Try it out
+
+Deployed on https://helia-identify.on.fleek.co/
