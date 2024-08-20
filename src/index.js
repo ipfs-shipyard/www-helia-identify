@@ -166,6 +166,7 @@ const App = async () => {
 
   clearStatus()
   showStatus('Helia node ready', COLORS.active)
+  showStatus(`Libp2p PeerID: ${helia.libp2p.peerId.toString()}`, COLORS.active)
   showStatus('Try running identify with a Peer ID or a Multiaddr', COLORS.active)
   showStatus('E.g. /dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN', COLORS.active)
 
