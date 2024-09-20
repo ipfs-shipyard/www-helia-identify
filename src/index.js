@@ -2,6 +2,8 @@ import { multiaddr } from '@multiformats/multiaddr'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { createHelia } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
+import { bootstrap } from '@libp2p/bootstrap'
+
 
 const App = async () => {
   const DOM = {
@@ -138,9 +140,13 @@ const App = async () => {
 
   const helia = await createHelia({
     libp2p: {
-      addresses: {
-        listen: []
-      }
+      peerDiscovery: [
+        bootstrap({
+          list: [
+            '/dns4/va1.bootstrap.libp2p.io/tcp/443/wss/p2p/12D3KooWKnDdG3iXw9eTFijk3EWSunZcFi54Zka4wmtqtt6rPxc8'
+          ]
+        })
+      ]
     }
   })
 
