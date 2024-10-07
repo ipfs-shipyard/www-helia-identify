@@ -1,7 +1,9 @@
 import { multiaddr } from '@multiformats/multiaddr'
 import { peerIdFromString } from '@libp2p/peer-id'
-import { createHelia } from 'helia'
+import { createHelia, libp2pDefaults } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
+import { devToolsMetrics } from '@libp2p/devtools-metrics'
+import { identify } from '@libp2p/identify'
 
 const App = async () => {
   const DOM = {
@@ -84,34 +86,38 @@ const App = async () => {
     clearStatus()
     showStatus('Connecting to ' + peerIdOrMultiaddr)
 
-    const connection = await helia.libp2p.dial(multiaddrs)
+    try {
+      const connection = await helia.libp2p.dial(multiaddrs)
 
-    clearStatus()
-    showStatus('Connected, running identify')
+      clearStatus()
+      showStatus('Connected, running identify')
 
-    const response = await helia.libp2p.services.identify.identify(connection, {
-      signal
-    })
+      const response = await helia.libp2p.services.identify.identify(connection, {
+        signal
+      })
 
-    const data = {
-      peerId: response.peerId.toString(),
-      agentVersion: response.agentVersion,
-      protocolVersion: response.protocolVersion,
-      observedAddr: response.observedAddr,
-      publicKey: base58btc.encode(response.publicKey),
-      listenAddrs: response.listenAddrs.map(ma => ma.toString()),
-      protocols: response.protocols
-    }
-
-    if (response.signedPeerRecord != null) {
-      data.signedPeerRecord = {
-        seq: `${response.signedPeerRecord.seq}n`,
-        addresses: response.signedPeerRecord.addresses.map(ma => ma.toString())
+      const data = {
+        peerId: response.peerId.toString(),
+        agentVersion: response.agentVersion,
+        protocolVersion: response.protocolVersion,
+        observedAddr: response.observedAddr,
+        publicKey: base58btc.encode(response.publicKey),
+        listenAddrs: response.listenAddrs.map(ma => ma.toString()),
+        protocols: response.protocols
       }
-    }
 
-    clearStatus()
-    showStatus(`<pre>${JSON.stringify(data, null, 2)}</pre>`, COLORS.success)
+      if (response.signedPeerRecord != null) {
+        data.signedPeerRecord = {
+          seq: `${response.signedPeerRecord.seq}n`,
+          addresses: response.signedPeerRecord.addresses.map(ma => ma.toString())
+        }
+      }
+
+      clearStatus()
+      showStatus(`<pre>${JSON.stringify(data, null, 2)}</pre>`, COLORS.success)
+    } catch (err) {
+      showStatus(`<pre>${err.stack ?? err.message}</pre>`, COLORS.error)
+    }
   }
 
   // Event listeners
@@ -136,12 +142,15 @@ const App = async () => {
 
   showStatus('Creating Helia node')
 
+  const libp2p = libp2pDefaults()
+  libp2p.addresses.listen = []
+  libp2p.metrics = devToolsMetrics()
+  libp2p.services.identify = identify({
+    runOnConnectionOpen: false
+  })
+
   const helia = await createHelia({
-    libp2p: {
-      addresses: {
-        listen: []
-      }
-    }
+    libp2p
   })
 
   DOM.peerCount().innerText = 0
