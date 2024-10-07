@@ -2,6 +2,7 @@ import { multiaddr } from '@multiformats/multiaddr'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { createHelia, libp2pDefaults } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
+import { bootstrap } from '@libp2p/bootstrap'
 import { devToolsMetrics } from '@libp2p/devtools-metrics'
 import { identify } from '@libp2p/identify'
 
@@ -10,8 +11,7 @@ const App = async () => {
     input: () => document.getElementById('input'),
     identifyBtn: () => document.getElementById('identify-button'),
     output: () => document.getElementById('output'),
-    terminal: () => document.getElementById('terminal'),
-    peerCount: () => document.getElementById('node-peer-count')
+    terminal: () => document.getElementById('terminal')
   }
 
   const COLORS = {
@@ -152,11 +152,6 @@ const App = async () => {
   const helia = await createHelia({
     libp2p
   })
-
-  DOM.peerCount().innerText = 0
-  setInterval(() => {
-    DOM.peerCount().innerText = helia.libp2p.getPeers().length
-  }, 1000)
 
   clearStatus()
   showStatus(`Waiting for peers...`)
