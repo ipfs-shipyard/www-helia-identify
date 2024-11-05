@@ -174,6 +174,7 @@ const App = async () => {
 
   const libp2p = libp2pDefaults()
   libp2p.addresses = {}
+  libp2p.peerDiscovery = [] // don't connect to the bootstrap nodes by default
   libp2p.metrics = devToolsMetrics()
   libp2p.services.identify = identify({
     runOnConnectionOpen: false
@@ -185,21 +186,6 @@ const App = async () => {
     libp2p
   }) as HeliaLibp2p<Libp2p<DefaultLibp2pServices>>
   
-  clearStatus()
-  showStatus(`Waiting for peers...`)
-
-  while (true) {
-    if (helia.libp2p.getPeers().length > 0) {
-      break
-    }
-
-    await new Promise<void>(resolve => {
-      setTimeout(() => {
-        resolve()
-      }, 1000)
-    })
-  }
-
   clearStatus()
 
   showStatus('Helia node ready', COLORS.active)
