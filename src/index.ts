@@ -34,7 +34,7 @@ const App = async () => {
 
     const line = document.createElement('p')
     line.innerHTML = text
-    if (bg) {
+    if (bg != null) {
       line.style.color = bg
     }
 
