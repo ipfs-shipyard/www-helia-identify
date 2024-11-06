@@ -7,8 +7,9 @@
   "license": "ISC",
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "mkdir -p dist && cp src/index.html src/style.css dist && node esbuild.js",
-    "start": "npm run build && node esbuild.js --serve",
+    "copy-assets": "mkdir -p dist && cp src/index.html src/style.css dist",
+    "build": "npm run copy-assets && node esbuild.js",
+    "start": "npm run copy-assets && node esbuild.js --serve",
     "test": "npm run build && test-browser-example test"
   },
   "browserslist": "last 1 Chrome version",
