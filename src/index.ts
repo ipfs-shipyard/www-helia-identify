@@ -57,7 +57,6 @@ const App = async () => {
     } else {
       showStatus(`Searching for peer ${peerIdOrMultiaddr}...`)
       const peerId = peerIdFromString(peerIdOrMultiaddr)
-      // TODO: fix type error related to PeerID
       const peer = await helia.libp2p.peerRouting.findPeer(peerId, {
         signal,
         onProgress: (evt) => {
