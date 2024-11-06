@@ -24,7 +24,7 @@ if (isWatch || isServe) {
   // Create a context for either watch or serve mode
   context(buildOptions).then(async (ctx) => {
     // Start watch mode if requested
-    if (isWatch) {
+    if (isWatch && !isServe) {
       await ctx.watch()
       console.log('Watching for changes...')
     }
