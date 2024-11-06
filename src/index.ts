@@ -118,9 +118,9 @@ const App = async () => {
       showStatus(`<pre>${JSON.stringify(data, null, 2)}</pre>`, COLORS.success)
     } catch (err) {
       if (err instanceof Error) {
-        showStatus(`<pre>${err.stack ?? err.message}</pre>`, COLORS.error)
+        showStatus(`<pre>${err.stack ?? ``}${err.message}</pre>`, COLORS.error)
       } else {
-        showStatus(`<pre>${err}</pre>`, COLORS.error)
+        console.error(err)
       }
     }
   }
