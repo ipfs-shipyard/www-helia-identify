@@ -155,11 +155,9 @@ const App = async () => {
     runOnConnectionOpen: false
   })
 
-
-  // TODO: without the type assertion, the underlying libp2p type doesn't have default services
-  const helia = await createHelia({
+  const helia = await createHelia<Libp2p<DefaultLibp2pServices>>({
     libp2p
-  }) as HeliaLibp2p<Libp2p<DefaultLibp2pServices>>
+  })
   
   clearStatus()
   showStatus(`Waiting for peers...`)
