@@ -158,7 +158,6 @@ const App = async () => {
   const helia = await createHelia<Libp2p<DefaultLibp2pServices>>({
     libp2p
   })
-  
   clearStatus()
   showStatus(`Waiting for peers...`)
 
