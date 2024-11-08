@@ -145,6 +145,29 @@ const App = async () => {
     }
   }
 
+  const populateInputFromURL = () => {
+    const params = new URLSearchParams(window.location.search)
+    const peerOrMaddr = params.get('peer-or-maddr')
+    if (peerOrMaddr) {
+      DOM.input().value = peerOrMaddr
+    }
+  }
+
+  const updateQueryParam = (value: string) => {
+    const url = new URL(window.location.href)
+    if (value) {
+      url.searchParams.set('peer-or-maddr', value)
+    } else {
+      url.searchParams.delete('peer-or-maddr')
+    }
+    window.history.replaceState({}, '', url)
+  }
+
+  DOM.input().oninput = (e) => {
+    const value = (e.target as HTMLInputElement).value.trim()
+    updateQueryParam(value)
+  }
+
   showStatus('Creating Helia node')
 
 
@@ -181,6 +204,8 @@ const App = async () => {
   showStatus('E.g. /dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN', COLORS.active)
 
   DOM.identifyBtn().disabled = false
+
+  populateInputFromURL()
 }
 
 App().catch(err => {
