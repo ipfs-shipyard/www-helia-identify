@@ -33,5 +33,8 @@ if (isWatch || isServe) {
   })
 } else {
   // Regular one-time build
-  ctx.then(ctx => ctx.build()).catch(() => process.exit(1))
+  ctx.then(ctx => ctx.build()).catch((err) => {
+	console.error(err)
+  	process.exit(1)
+  })
 }
