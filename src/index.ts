@@ -1,17 +1,17 @@
 import { multiaddr } from '@multiformats/multiaddr'
 import { peerIdFromString } from '@libp2p/peer-id'
-import { createHelia, libp2pDefaults } from 'helia'
+import { createHelia, DefaultLibp2pServices, HeliaLibp2p, libp2pDefaults } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
-import { bootstrap } from '@libp2p/bootstrap'
 import { devToolsMetrics } from '@libp2p/devtools-metrics'
 import { identify } from '@libp2p/identify'
+import type { Libp2p } from '@libp2p/interface'
 
 const App = async () => {
   const DOM = {
-    input: () => document.getElementById('input'),
-    identifyBtn: () => document.getElementById('identify-button'),
-    output: () => document.getElementById('output'),
-    terminal: () => document.getElementById('terminal')
+    input: () => document.getElementById('input') as HTMLInputElement,
+    identifyBtn: () => document.getElementById('identify-button') as HTMLButtonElement,
+    output: () => document.getElementById('output') as HTMLDivElement,
+    terminal: () => document.getElementById('terminal') as HTMLDivElement
   }
 
   const COLORS = {
@@ -29,23 +29,24 @@ const App = async () => {
     DOM.output().innerHTML = ''
   }
 
-  const showStatus = (text, bg, id = null) => {
+  const showStatus = (text: string, bg?: string, id?: string) => {
     const log = DOM.output()
 
     const line = document.createElement('p')
     line.innerHTML = text
-    line.style.color = bg
+    if (bg != null) {
+      line.style.color = bg
+    }
 
     if (id) {
       line.id = id
     }
 
     log.appendChild(line)
-
-    scrollToBottom(log)
+    scrollToBottom()
   }
 
-  const runIdentify = async (peerIdOrMultiaddr) => {
+  const runIdentify = async (peerIdOrMultiaddr: string) => {
     clearStatus()
 
     const signal = AbortSignal.timeout(10000)
@@ -96,12 +97,12 @@ const App = async () => {
         signal
       })
 
-      const data = {
+      const data: any = {
         peerId: response.peerId.toString(),
         agentVersion: response.agentVersion,
         protocolVersion: response.protocolVersion,
         observedAddr: response.observedAddr,
-        publicKey: base58btc.encode(response.publicKey),
+        publicKey: response.publicKey && base58btc.encode(response.publicKey),
         listenAddrs: response.listenAddrs.map(ma => ma.toString()),
         protocols: response.protocols
       }
@@ -116,7 +117,11 @@ const App = async () => {
       clearStatus()
       showStatus(`<pre>${JSON.stringify(data, null, 2)}</pre>`, COLORS.success)
     } catch (err) {
-      showStatus(`<pre>${err.stack ?? err.message}</pre>`, COLORS.error)
+      if (err instanceof Error) {
+        showStatus(`<pre>${err.stack ?? ``}${err.message}</pre>`, COLORS.error)
+      } else {
+        console.error(err)
+      }
     }
   }
 
@@ -140,19 +145,42 @@ const App = async () => {
     }
   }
 
+  const populateInputFromURL = () => {
+    const params = new URLSearchParams(window.location.search)
+    const peerOrMaddr = params.get('peer-or-maddr')
+    if (peerOrMaddr) {
+      DOM.input().value = peerOrMaddr
+    }
+  }
+
+  const updateQueryParam = (value: string) => {
+    const url = new URL(window.location.href)
+    if (value) {
+      url.searchParams.set('peer-or-maddr', value)
+    } else {
+      url.searchParams.delete('peer-or-maddr')
+    }
+    window.history.replaceState({}, '', url)
+  }
+
+  DOM.input().oninput = (e) => {
+    const value = (e.target as HTMLInputElement).value.trim()
+    updateQueryParam(value)
+  }
+
   showStatus('Creating Helia node')
 
+
   const libp2p = libp2pDefaults()
-  libp2p.addresses.listen = []
+  libp2p.addresses = {}
   libp2p.metrics = devToolsMetrics()
   libp2p.services.identify = identify({
     runOnConnectionOpen: false
   })
 
-  const helia = await createHelia({
+  const helia = await createHelia<Libp2p<DefaultLibp2pServices>>({
     libp2p
   })
-
   clearStatus()
   showStatus(`Waiting for peers...`)
 
@@ -161,7 +189,7 @@ const App = async () => {
       break
     }
 
-    await new Promise((resolve) => {
+    await new Promise<void>(resolve => {
       setTimeout(() => {
         resolve()
       }, 1000)
@@ -169,12 +197,15 @@ const App = async () => {
   }
 
   clearStatus()
+
   showStatus('Helia node ready', COLORS.active)
   showStatus(`Libp2p PeerID: ${helia.libp2p.peerId.toString()}`, COLORS.active)
   showStatus('Try running identify with a Peer ID or a Multiaddr', COLORS.active)
   showStatus('E.g. /dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN', COLORS.active)
 
   DOM.identifyBtn().disabled = false
+
+  populateInputFromURL()
 }
 
 App().catch(err => {
