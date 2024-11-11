@@ -1,6 +1,9 @@
-import { build, context } from 'esbuild'
+import { build, context, } from 'esbuild'
 
-const ctx = context({
+/**
+ * @type {import('esbuild').BuildOptions}
+ */
+const config = {
   entryPoints: ['./src/index.ts'],
   outfile: './dist/index.js',
   sourcemap: 'both',
@@ -13,7 +16,7 @@ const ctx = context({
     'process.env.NODE_DEBUG': 'false',
     global: 'globalThis'
   },
-})
+}
 
 // Check command line arguments
 const isWatch = process.argv.includes('--watch')
@@ -21,7 +24,7 @@ const isServe = process.argv.includes('--serve')
 
 if (isWatch || isServe) {
   // Create a context for either watch or serve mode
-  ctx.then(async (ctx) => {
+  context(config).then(async (ctx) => {
     // Start serve mode if requested
     if (isServe) {
       const { host, port } = await ctx.serve({ servedir: './dist', })
@@ -33,8 +36,8 @@ if (isWatch || isServe) {
   })
 } else {
   // Regular one-time build
-  ctx.then(ctx => ctx.build()).catch((err) => {
-	console.error(err)
-  	process.exit(1)
+  build(config).catch((err) => {
+    console.error(err)
+    process.exit(1)
   })
 }
