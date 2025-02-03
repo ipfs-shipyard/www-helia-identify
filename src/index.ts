@@ -1,9 +1,10 @@
-import { multiaddr } from '@multiformats/multiaddr'
-import { peerIdFromString } from '@libp2p/peer-id'
-import { createHelia, DefaultLibp2pServices, HeliaLibp2p, libp2pDefaults } from 'helia'
-import { base58btc } from 'multiformats/bases/base58'
 import { devToolsMetrics } from '@libp2p/devtools-metrics'
 import { identify } from '@libp2p/identify'
+import { peerIdFromString } from '@libp2p/peer-id'
+import { webTransport } from '@libp2p/webtransport'
+import { multiaddr } from '@multiformats/multiaddr'
+import { createHelia, DefaultLibp2pServices, HeliaLibp2p, libp2pDefaults } from 'helia'
+import { base58btc } from 'multiformats/bases/base58'
 import type { Libp2p } from '@libp2p/interface'
 
 const App = async () => {
@@ -170,7 +171,6 @@ const App = async () => {
 
   showStatus('Creating Helia node')
 
-
   const libp2p = libp2pDefaults()
   libp2p.addresses = {}
   libp2p.peerDiscovery = [] // don't connect to the bootstrap nodes by default
@@ -178,6 +178,8 @@ const App = async () => {
   libp2p.services.identify = identify({
     runOnConnectionOpen: false
   })
+  // add webtransport transport
+  libp2p.transports?.push(webTransport())
 
   const helia = await createHelia<Libp2p<DefaultLibp2pServices>>({
     libp2p
