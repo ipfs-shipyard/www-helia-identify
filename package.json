@@ -17,14 +17,15 @@
     "@libp2p/devtools-metrics": "^1.1.8",
     "@libp2p/identify": "^3.0.10",
     "@libp2p/peer-id": "^5.0.7",
+    "@libp2p/webtransport": "^5.0.22",
     "@multiformats/multiaddr": "^12.3.1",
     "helia": "^5.1.0",
     "multiformats": "^13.3.1"
   },
   "devDependencies": {
-    "typescript": "^5.6.3",
     "@types/node": "^22.9.0",
     "esbuild": "^0.24.0",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
   }
 }
