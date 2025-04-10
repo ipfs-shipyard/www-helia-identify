@@ -3,7 +3,7 @@ import { identify } from '@libp2p/identify'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { webTransport } from '@libp2p/webtransport'
 import { multiaddr } from '@multiformats/multiaddr'
-import { createHelia, DefaultLibp2pServices, HeliaLibp2p, libp2pDefaults } from 'helia'
+import { createHelia, DefaultLibp2pServices, libp2pDefaults } from 'helia'
 import { base58btc } from 'multiformats/bases/base58'
 import type { Libp2p } from '@libp2p/interface'
 

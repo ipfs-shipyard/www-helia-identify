@@ -27,8 +27,11 @@ if (isWatch || isServe) {
   context(config).then(async (ctx) => {
     // Start serve mode if requested
     if (isServe) {
-      const { host, port } = await ctx.serve({ servedir: './dist', })
-      console.log(`Server running at http://${host.replace('0.0.0.0', '127.0.0.1')}:${port}`)
+      const { hosts, port } = await ctx.serve({ servedir: './dist', })
+      console.log('Server running at')
+      hosts.forEach(host => {
+        console.log(`http://${host}:${port}`)
+      })
     } else {
       await ctx.watch()
       console.log('Watching for changes...')
