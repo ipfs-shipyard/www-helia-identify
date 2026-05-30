@@ -14,18 +14,18 @@
   },
   "browserslist": "last 1 Chrome version",
   "dependencies": {
-    "@ipshipyard/libp2p-inspector-metrics": "^1.0.0",
-    "@libp2p/identify": "^3.0.10",
-    "@libp2p/peer-id": "^5.0.7",
-    "@libp2p/webtransport": "^5.0.22",
-    "@multiformats/multiaddr": "^12.3.1",
-    "helia": "^5.1.0",
-    "multiformats": "^13.3.1"
+    "@ipshipyard/libp2p-inspector-metrics": "^2.0.0",
+    "@libp2p/identify": "^4.1.6",
+    "@libp2p/peer-id": "^6.0.9",
+    "@libp2p/webtransport": "^6.0.27",
+    "@multiformats/multiaddr": "^13.0.3",
+    "helia": "^6.1.4",
+    "multiformats": "^14.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "esbuild": "^0.25.2",
+    "@types/node": "^25.9.1",
+    "esbuild": "^0.28.0",
     "rimraf": "^6.0.1",
-    "typescript": "^5.6.3"
+    "typescript": "^6.0.3"
   }
 }

@@ -77,7 +77,7 @@ const App = async () => {
 
       // multiaddrs need peer ids
       multiaddrs = peer.multiaddrs.map(ma => {
-        if (ma.getPeerId() == null) {
+        if (ma.getComponents().find(c => c.name === 'p2p') == null) {
           return ma.encapsulate(`/p2p/${peerId}`)
         }
 
