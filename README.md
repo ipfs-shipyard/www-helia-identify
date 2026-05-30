@@ -21,6 +21,4 @@ Ever wonder what a remote peer is sending in an [identify](https://github.com/li
 
 ## Try it out
 
-Deployed on https://helia-identify.on.fleek.co/
-
-Currently best used with Firefox Nightly due to superior WebTransport support.
+Deployed on https://identify.ipfs.network
