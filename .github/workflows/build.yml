@@ -59,7 +59,7 @@ jobs:
 
       - name: Update DNSLink
         if: github.ref == 'refs/heads/main' # only update DNSLink for main branch
-        uses: ipfs/dnslink-action@v0.1
+        uses: ipfs/dnslink-action@v1.1
         with:
           cid: ${{ steps.deploy.outputs.cid }}
           dnslink_domain: 'identify.ipfs.network'
