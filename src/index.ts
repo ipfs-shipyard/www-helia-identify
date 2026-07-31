@@ -3,9 +3,9 @@ import { identify } from '@libp2p/identify'
 import { peerIdFromString } from '@libp2p/peer-id'
 import { webTransport } from '@libp2p/webtransport'
 import { multiaddr } from '@multiformats/multiaddr'
-import { createHelia, DefaultLibp2pServices, libp2pDefaults } from 'helia'
+import { createHeliaLight } from 'helia'
+import { withLibp2p, libp2pDefaults } from '@helia/libp2p'
 import { base58btc } from 'multiformats/bases/base58'
-import type { Libp2p } from '@libp2p/interface'
 
 const App = async () => {
   const DOM = {
@@ -181,9 +181,7 @@ const App = async () => {
   // add webtransport transport
   libp2p.transports?.push(webTransport())
 
-  const helia = await createHelia<Libp2p<DefaultLibp2pServices>>({
-    libp2p
-  })
+  const helia = await withLibp2p(createHeliaLight(), libp2p).start()
   clearStatus()
 
   showStatus('Helia node ready', COLORS.active)
