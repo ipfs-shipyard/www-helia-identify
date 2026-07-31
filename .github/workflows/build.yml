@@ -48,26 +48,27 @@ jobs:
         with:
           path: ${{ env.BUILD_PATH }}
 
-      - uses: ipfs/ipfs-deploy-action@v1
-        name: Deploy to IPFS
-        id: deploy
-        with:
-          path-to-deploy: ${{ env.BUILD_PATH }}
-          storacha-key: ${{ secrets.STORACHA_KEY }}
-          storacha-proof: ${{ secrets.STORACHA_PROOF }}
-          github-token: ${{ github.token }}
+      # - uses: ipshipyard/ipfs-deploy-action@v2
+      #   name: Deploy to IPFS
+      #   id: deploy
+      #   with:
+      #     path-to-deploy: ${{ env.BUILD_PATH }}
+      #     cluster-url: ${{ secrets.CLUSTER_URL }}
+      #     cluster-user: ${{ secrets.CLUSTER_USER }}
+      #     cluster-password: ${{ secrets.CLUSTER_PASSWORD }}
+      #     github-token: ${{ github.token }}
 
-      - name: Update DNSLink
-        if: github.ref == 'refs/heads/main' # only update DNSLink for main branch
-        uses: ipfs/dnslink-action@v0.1
-        with:
-          cid: ${{ steps.deploy.outputs.cid }}
-          dnslink_domain: 'identify.ipfs.network'
-          cf_record_id: ${{ secrets.CF_DNS_RECORD_ID }}
-          cf_zone_id: ${{ secrets.CF_DNS_ZONE_ID }}
-          cf_auth_token: ${{ secrets.CF_DNS_AUTH_TOKEN }}
-          github_token: ${{ github.token }}
-          set_github_status: true
+      # - name: Update DNSLink
+      #   if: github.ref == 'refs/heads/main' # only update DNSLink for main branch
+      #   uses: ipfs/dnslink-action@v0.1
+      #   with:
+      #     cid: ${{ steps.deploy.outputs.cid }}
+      #     dnslink_domain: 'identify.ipfs.network'
+      #     cf_record_id: ${{ secrets.CF_DNS_RECORD_ID }}
+      #     cf_zone_id: ${{ secrets.CF_DNS_ZONE_ID }}
+      #     cf_auth_token: ${{ secrets.CF_DNS_AUTH_TOKEN }}
+      #     github_token: ${{ github.token }}
+      #     set_github_status: true
 
 
   gh-pages:
