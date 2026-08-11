@@ -24,7 +24,7 @@
     "multiformats": "^14.0.5"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
+    "@types/node": "^26.2.0",
     "esbuild": "^0.28.0",
     "rimraf": "^6.0.1",
     "typescript": "^6.0.3"
