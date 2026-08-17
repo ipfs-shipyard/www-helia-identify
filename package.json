@@ -18,7 +18,7 @@
     "@ipshipyard/libp2p-inspector-metrics": "^2.0.0",
     "@libp2p/identify": "^4.1.12",
     "@libp2p/peer-id": "^6.0.14",
-    "@libp2p/webtransport": "^6.0.34",
+    "@libp2p/webtransport": "^6.0.35",
     "@multiformats/multiaddr": "^13.0.3",
     "helia": "^7.1.2",
     "multiformats": "^14.0.5"
